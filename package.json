@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "echo 'Skipping build for backend deployment...'",
-    "start": "next start",
-    "lint": "next lint"
+  "dev": "next dev",
+  "build": "echo 'Skipping build for backend deployment...'",
+  "start": "node server/index.js",
+  "lint": "next lint"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.14",
