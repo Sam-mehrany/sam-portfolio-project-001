@@ -8,7 +8,8 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-const port = 8000;
+// Use the port from the environment, or 8000 for local development
+const port = process.env.PORT || 8000;
 
 // --- Config ---
 const JWT_SECRET = 'your-super-secret-key-that-is-long-and-random';
@@ -18,17 +19,21 @@ const ADMIN_USER = { username: 'sam', password: '1234' };
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// ✅ CORRECTED: Serve files directly from the 'uploads' disk mounted at the root
+app.use('/uploads', express.static('uploads'));
+
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();
 });
 
 // --- Multer Setup for File Uploads ---
-const uploadsDir = '/uploads';
+// ✅ CORRECTED: This is the mount path for the persistent disk
+const uploadsDir = 'uploads';
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
+  // ✅ CORRECTED: Use the uploadsDir variable for the destination
+  destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
@@ -37,13 +42,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // --- Database Setup ---
-const dbPath = path.join('/uploads', 'cms.db'); const db = new sqlite3.Database(dbPath, (err) => {
+// ✅ CORRECTED: Point the database path to the persistent disk
+const dbPath = path.join(uploadsDir, 'cms.db');
+const db = new sqlite3.Database(dbPath, (err) => {
   if (err) console.error("DB Connection Error:", err.message);
   else console.log('✅ Connected to the SQLite database.');
 });
 
 db.serialize(() => {
-  // ACTION: Added a 'thumbnail' column to the projects table
   db.run(`CREATE TABLE IF NOT EXISTS projects (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
     slug TEXT NOT NULL UNIQUE, 
