@@ -1,0 +1,8 @@
+{
+  "app": "inspiring-noether-emrn-2iqx",
+  "port": 3000,
+  "build": {
+    "location": "iran"
+  },
+  "disks": []
+}
