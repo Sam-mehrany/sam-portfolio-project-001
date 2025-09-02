@@ -1,8 +1,5 @@
 {
-  "app": "inspiring-noether-emrn-2iqx",
+  "platform": "node",
   "port": 3000,
-  "build": {
-    "location": "iran"
-  },
-  "disks": []
+  "start": "node server/index.js"
 }
