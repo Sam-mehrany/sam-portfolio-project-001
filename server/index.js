@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 
 // --- Multer Setup for File Uploads ---
-const uploadsDir = path.join(__dirname, 'uploads');
+const uploadsDir = '/uploads';
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
