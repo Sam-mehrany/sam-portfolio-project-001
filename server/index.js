@@ -37,7 +37,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // --- Database Setup ---
-const db = new sqlite3.Database('./cms.db', (err) => {
+const dbPath = path.join('/uploads', 'cms.db'); const db = new sqlite3.Database(dbPath, (err) => {
   if (err) console.error("DB Connection Error:", err.message);
   else console.log('✅ Connected to the SQLite database.');
 });
